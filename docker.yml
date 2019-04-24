@@ -1,0 +1,51 @@
+- hosts: aws
+  gather_facts: false
+  tasks:
+    - name: configure / Update yum packages
+      yum:
+        name: '*'
+        state: latest
+        update_cache: yes
+
+    - name: install docker
+      yum:
+        name='docker'
+        state=latest
+
+    - name: service docker
+      service:
+        name=docker
+        state=started
+        enabled=yes
+
+    - shell: curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+
+    - shell: sudo python get-pip.py --user
+
+    - pip:
+        name: docker-py
+        state: present
+       
+       
+    - service:
+        name: docker
+        state: started
+        enabled: yes
+       
+    - name: pull an image
+      docker_image:
+        name: nginx 
+         
+    - docker_container: 
+        name: nginx_server
+        image: nginx
+        command: /bin/bash
+        state: started
+        detach: True
+        interactive: True
+        tty: True   
+        ipc_mode: host
+        ports:
+         - "80:80"
+
+
