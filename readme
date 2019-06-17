@@ -1,1 +1,3 @@
+
+Ansible playbook to automate launch of AWS instance and install docker in the instance.
 ansible.cfg and hosts files are modified and will be required to run docker.yml.
